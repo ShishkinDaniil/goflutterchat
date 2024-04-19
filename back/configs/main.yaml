@@ -1,0 +1,7 @@
+auth:
+  accessTokenTTL: 2h
+  refreshTokenTTL: 720h #30 days
+
+http:
+  port: 8000
+  host: localhost
