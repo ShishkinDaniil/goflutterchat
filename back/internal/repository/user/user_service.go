@@ -7,7 +7,6 @@ import (
 
 	"back/pkg/auth"
 
-	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
 )
 
@@ -29,7 +28,7 @@ func NewService(repository Repository, tokenManager auth.TokenManager) Service {
 	}
 }
 
-func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*CreateUserRes, error) {
+func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*UserRes, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -37,11 +36,11 @@ func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*CreateUser
 	if err != nil {
 		return nil, err
 	}
-	userUID, err := uuid.Parse(req.UID)
+	userUID, err := uuid.NewUUID()
 	if err != nil {
 		return nil, err
 	}
-	createdTime, err := time.Parse("2006-01-02T15:04:05", req.Created)
+	createdTime, err := time.Parse("2006-01-02T15:04:05", time.Now().Format("2006-01-02T15:04:05"))
 	if err != nil {
 		return nil, err
 	}
@@ -71,11 +70,9 @@ func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*CreateUser
 		return nil, err
 	}
 
-	res := &CreateUserRes{
-		UID:          r.UID.String(),
+	res := &UserRes{
 		Name:         r.Name,
 		Email:        r.Email,
-		Created:      r.Created.String(),
 		RefreshToken: refreshToken,
 		AccessToken:  ss,
 	}
@@ -83,13 +80,7 @@ func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*CreateUser
 	return res, nil
 }
 
-type MyJWTClaims struct {
-	UID  string `json:"UID"`
-	Name string `json:"name"`
-	jwt.RegisteredClaims
-}
-
-func (s *service) Login(c context.Context, req *LoginUserReq) (*LoginUserRes, error) {
+func (s *service) Login(c context.Context, req *LoginUserReq) (*UserRes, error) {
 	ctx, cancel := context.WithTimeout(c, s.timeout)
 	defer cancel()
 
@@ -105,7 +96,7 @@ func (s *service) Login(c context.Context, req *LoginUserReq) (*LoginUserRes, er
 	now := time.Now()
 	refreshToken, err := s.tokenManager.NewRefreshToken()
 	if err != nil {
-		return &LoginUserRes{}, err
+		return &UserRes{}, err
 	}
 	err = s.Repository.CreateRefreshToken(ctx, u.UID.String(), refreshToken, now, now.Add(s.refreshTokenTTL))
 	if err != nil {
@@ -113,24 +104,19 @@ func (s *service) Login(c context.Context, req *LoginUserReq) (*LoginUserRes, er
 	}
 	ss, err := s.tokenManager.NewJWT(u.UID.String(), s.accessTokenTTL)
 	if err != nil {
-		return &LoginUserRes{}, err
+		return &UserRes{}, err
 	}
 
-	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, MyJWTClaims{
-	// 	UID:  u.UID.String(),
-	// 	Name: u.Name,
-	// 	RegisteredClaims: jwt.RegisteredClaims{
-	// 		Issuer:    u.UID.String(),
-	// 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
-	// 	},
-	// })
+	return &UserRes{AccessToken: ss, RefreshToken: refreshToken, Name: u.Name, Email: u.Email}, nil
+}
 
-	// ss, err := token.SignedString([]byte(secretKey))
-	// if err != nil {
-	// 	return nil, err
-	// }
+func (s *service) GetProfile(c context.Context, req string) (*UserBodyRes, error) {
+	user, err := s.Repository.GetUserByUid(c, req)
+	if err != nil {
+		return nil, err
+	}
 
-	return &LoginUserRes{accessToken: ss, refreshToken: refreshToken, Name: u.Name, UID: u.UID.String()}, nil
+	return &UserBodyRes{Name: user.Name, Email: user.Email}, nil
 }
 
 func (s *service) RefreshTokens(c context.Context, refreshToken string) (*TokenResponse, error) {
@@ -152,7 +138,7 @@ func (s *service) RefreshTokens(c context.Context, refreshToken string) (*TokenR
 		return nil, errFind
 	}
 	print("NewJWT")
-	ss, err := s.tokenManager.NewJWT(uid, s.accessTokenTTL)
+	ss, err := s.tokenManager.NewJWT(*uid, s.accessTokenTTL)
 	if err != nil {
 		return nil, err
 	}

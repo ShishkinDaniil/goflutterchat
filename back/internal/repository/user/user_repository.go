@@ -58,7 +58,18 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (*User, e
 	query := "SELECT uid, email, name, password, created FROM users WHERE email = $1"
 	err := r.db.QueryRowContext(ctx, query, email).Scan(&u.UID, &u.Email, &u.Name, &u.Password, &u.Created)
 	if err != nil {
-		return &User{}, err
+		return &User{}, domain.ErrUserNotFound
+	}
+
+	return &u, nil
+}
+
+func (r *repository) GetUserByUid(ctx context.Context, uid string) (*User, error) {
+	u := User{}
+	query := "SELECT uid, email, name, password, created FROM users WHERE uid = $1"
+	err := r.db.QueryRowContext(ctx, query, uid).Scan(&u.UID, &u.Email, &u.Name, &u.Password, &u.Created)
+	if err != nil {
+		return &User{}, domain.ErrUserNotFound
 	}
 
 	return &u, nil
@@ -83,12 +94,12 @@ func (r *repository) CreateRefreshToken(ctx context.Context, userUID string, ref
 	return nil
 }
 
-func (r *repository) GetUidByToken(ctx context.Context, refreshToken string) (string, error) {
-	var uid string
+func (r *repository) GetUidByToken(ctx context.Context, refreshToken string) (*string, error) {
+	var uid *string
 	query := "SELECT user_uid FROM user_refresh_tokens WHERE token = $1"
 	err := r.db.QueryRowContext(ctx, query, refreshToken).Scan(&uid)
 	if err != nil {
-		return "jopa", err
+		return nil, err
 	}
 
 	return uid, nil

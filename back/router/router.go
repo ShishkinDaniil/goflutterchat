@@ -33,6 +33,7 @@ func InitRouter(userHandler *user.Handler, wsHandler *ws.Handler) {
 
 	authenticated := r.Group("/", userHandler.UserIdentity)
 	{
+		authenticated.GET("/getProfile", userHandler.GetProfile)
 		authenticated.GET("/logout", userHandler.Logout)
 		authenticated.POST("/ws/createRoom", wsHandler.CreateRoom)
 		authenticated.GET("/ws/joinRoom/:roomId", wsHandler.JoinRoom)

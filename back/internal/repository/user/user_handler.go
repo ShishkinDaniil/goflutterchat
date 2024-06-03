@@ -28,6 +28,20 @@ func NewHandler(s Service, tokenManager auth.TokenManager) *Handler {
 	}
 }
 
+func (h *Handler) GetProfile(c *gin.Context) {
+	a, err := c.Get(userCtx)
+	if !err {
+		c.JSON(http.StatusInternalServerError, gin.H{})
+		return
+	}
+	res, errGet := h.Service.GetProfile(c, a.(string))
+	if errGet != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
+	c.JSON(http.StatusOK, res)
+}
+
 func (h *Handler) CreateUser(c *gin.Context) {
 	var u CreateUserReq
 	if err := c.ShouldBindJSON(&u); err != nil {
