@@ -18,9 +18,10 @@ func InitRouter(userHandler *user.Handler, wsHandler *ws.Handler) {
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST"},
-		AllowHeaders:     []string{"Content-Type"},
-		ExposeHeaders:    []string{"Content-Length"},
+		AllowHeaders:     []string{"Content-Type", "Access-Control-Allow-Origin"},
+		ExposeHeaders:    []string{"Content-Length", "Access-Control-Allow-Origin"},
 		AllowCredentials: true,
+		AllowWebSockets:  true,
 		AllowOriginFunc: func(origin string) bool {
 			return origin == "http://localhost:3000"
 		},

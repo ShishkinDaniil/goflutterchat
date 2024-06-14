@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class GoFlutterChatTheme {
@@ -7,6 +5,32 @@ class GoFlutterChatTheme {
     fontWeight: FontWeight.w500,
     fontSize: 18,
     color: _Colors.black,
+  );
+  static const Color roomItemColor = _Colors.calmShell;
+
+  static const shimmerGradient = LinearGradient(
+    colors: [
+      Color(0xFFEBEBF4),
+      Color(0xFFF4F4F4),
+      Color(0xFFEBEBF4),
+    ],
+    stops: [
+      0.1,
+      0.3,
+      0.4,
+    ],
+    begin: Alignment(-1.0, -0.3),
+    end: Alignment(1.0, 0.3),
+    tileMode: TileMode.clamp,
+  );
+  static const TextStyle roomsUserNameTextStyle = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle roomNameTextStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: _Colors.athensGray,
   );
 
   static ThemeData themeData = goFlutterChatThemeData(colorScheme);
@@ -25,16 +49,23 @@ class GoFlutterChatTheme {
         elevation: 0,
         centerTitle: true,
         titleTextStyle: appBarTextStyle,
-        backgroundColor: _Colors.white,
+        backgroundColor: _Colors.pippin,
       ),
       textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
           padding: MaterialStateProperty.all(
             EdgeInsets.zero,
           ),
+          textStyle: MaterialStateProperty.all(
+            TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: _Colors.pippin,
+            ),
+          ),
         ),
       ),
-      inputDecorationTheme: const InputDecorationTheme(
+      inputDecorationTheme: InputDecorationTheme(
         fillColor: _Colors.athensGray,
         focusColor: _Colors.athensGray,
         hoverColor: _Colors.athensGray,
@@ -60,10 +91,10 @@ class GoFlutterChatTheme {
           color: _Colors.spunPearl,
           fontWeight: FontWeight.w400,
         ),
-        contentPadding: EdgeInsetsDirectional.only(top: 4, bottom: 4),
+        contentPadding: EdgeInsetsDirectional.all(4),
         border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-          borderRadius: BorderRadius.zero,
+          borderSide: BorderSide(color: _Colors.waterloo, width: 2),
+          borderRadius: BorderRadius.circular(8),
         ),
         floatingLabelStyle: TextStyle(
           fontSize: 14,
@@ -76,7 +107,7 @@ class GoFlutterChatTheme {
 
   static const ColorScheme colorScheme = ColorScheme(
     brightness: Brightness.light,
-    primary: _Colors.blueRibbon,
+    primary: _Colors.calmShell,
     onPrimary: _Colors.black,
     secondary: _Colors.chablis,
     onSecondary: _Colors.chablis,
@@ -97,12 +128,9 @@ class _Colors {
   static const Color pippin = Color(0xffFFDFDF);
   static const Color calmShell = Color(0xffD0AFB3);
 
-  static const Color white = Color(0xFFFFFFFF);
   static const Color burntSienna = Color(0xFFEB5757);
-  static const Color blueRibbon = Color(0xFF0D72FF);
   static const Color athensGray = Color(0xFFFBFBFC);
   static const Color black = Color(0xFF000000);
-  static const Color webOrange = Color(0xFFFFA800);
   static const Color waterloo = Color(0xFF828796);
   static const Color spunPearl = Color(0xFFA9ABB7);
 }

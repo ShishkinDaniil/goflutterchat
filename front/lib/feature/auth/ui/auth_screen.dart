@@ -1,4 +1,3 @@
-import 'package:another_transformer_page_view/another_transformer_page_view.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:front/feature/auth/domain/auth_state/auth_cubit.dart';

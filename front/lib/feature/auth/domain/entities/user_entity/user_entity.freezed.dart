@@ -22,6 +22,7 @@ UserEntity _$UserEntityFromJson(Map<String, dynamic> json) {
 mixin _$UserEntity {
   String get email => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
+  String get chatId => throw _privateConstructorUsedError;
   String? get accessToken => throw _privateConstructorUsedError;
   String? get refreshToken => throw _privateConstructorUsedError;
 
@@ -38,7 +39,11 @@ abstract class $UserEntityCopyWith<$Res> {
       _$UserEntityCopyWithImpl<$Res, UserEntity>;
   @useResult
   $Res call(
-      {String email, String name, String? accessToken, String? refreshToken});
+      {String email,
+      String name,
+      String chatId,
+      String? accessToken,
+      String? refreshToken});
 }
 
 /// @nodoc
@@ -56,6 +61,7 @@ class _$UserEntityCopyWithImpl<$Res, $Val extends UserEntity>
   $Res call({
     Object? email = null,
     Object? name = null,
+    Object? chatId = null,
     Object? accessToken = freezed,
     Object? refreshToken = freezed,
   }) {
@@ -67,6 +73,10 @@ class _$UserEntityCopyWithImpl<$Res, $Val extends UserEntity>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      chatId: null == chatId
+          ? _value.chatId
+          : chatId // ignore: cast_nullable_to_non_nullable
               as String,
       accessToken: freezed == accessToken
           ? _value.accessToken
@@ -89,7 +99,11 @@ abstract class _$$UserEntityImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String email, String name, String? accessToken, String? refreshToken});
+      {String email,
+      String name,
+      String chatId,
+      String? accessToken,
+      String? refreshToken});
 }
 
 /// @nodoc
@@ -105,6 +119,7 @@ class __$$UserEntityImplCopyWithImpl<$Res>
   $Res call({
     Object? email = null,
     Object? name = null,
+    Object? chatId = null,
     Object? accessToken = freezed,
     Object? refreshToken = freezed,
   }) {
@@ -116,6 +131,10 @@ class __$$UserEntityImplCopyWithImpl<$Res>
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      chatId: null == chatId
+          ? _value.chatId
+          : chatId // ignore: cast_nullable_to_non_nullable
               as String,
       accessToken: freezed == accessToken
           ? _value.accessToken
@@ -135,6 +154,7 @@ class _$UserEntityImpl implements _UserEntity {
   const _$UserEntityImpl(
       {required this.email,
       required this.name,
+      required this.chatId,
       this.accessToken,
       this.refreshToken});
 
@@ -146,13 +166,15 @@ class _$UserEntityImpl implements _UserEntity {
   @override
   final String name;
   @override
+  final String chatId;
+  @override
   final String? accessToken;
   @override
   final String? refreshToken;
 
   @override
   String toString() {
-    return 'UserEntity(email: $email, name: $name, accessToken: $accessToken, refreshToken: $refreshToken)';
+    return 'UserEntity(email: $email, name: $name, chatId: $chatId, accessToken: $accessToken, refreshToken: $refreshToken)';
   }
 
   @override
@@ -162,6 +184,7 @@ class _$UserEntityImpl implements _UserEntity {
             other is _$UserEntityImpl &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.name, name) || other.name == name) &&
+            (identical(other.chatId, chatId) || other.chatId == chatId) &&
             (identical(other.accessToken, accessToken) ||
                 other.accessToken == accessToken) &&
             (identical(other.refreshToken, refreshToken) ||
@@ -171,7 +194,7 @@ class _$UserEntityImpl implements _UserEntity {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, email, name, accessToken, refreshToken);
+      Object.hash(runtimeType, email, name, chatId, accessToken, refreshToken);
 
   @JsonKey(ignore: true)
   @override
@@ -191,6 +214,7 @@ abstract class _UserEntity implements UserEntity {
   const factory _UserEntity(
       {required final String email,
       required final String name,
+      required final String chatId,
       final String? accessToken,
       final String? refreshToken}) = _$UserEntityImpl;
 
@@ -201,6 +225,8 @@ abstract class _UserEntity implements UserEntity {
   String get email;
   @override
   String get name;
+  @override
+  String get chatId;
   @override
   String? get accessToken;
   @override

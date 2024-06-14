@@ -7,12 +7,14 @@ part 'user_dto.g.dart';
 class UserDto {
   final dynamic accessToken;
   final dynamic refreshToken;
+  final dynamic chatId;
   final dynamic email;
   final dynamic name;
 
   UserDto({
     this.accessToken,
     this.refreshToken,
+    this.chatId,
     this.email,
     this.name,
   });
@@ -22,6 +24,7 @@ class UserDto {
   Map<String, dynamic> toJson() => _$UserDtoToJson(this);
   UserEntity toEntity() {
     return UserEntity(
+      chatId: chatId,
       email: email,
       name: name,
       accessToken: accessToken,

@@ -22,13 +22,15 @@ class AuthInterceptor extends QueuedInterceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 401) {
-      try {} catch (_) {
+      try {
         await locator.get<AuthCubit>().refreshToken();
         final request = await locator
             .get<DioContainer>()
             .dio
             .request(err.requestOptions.path);
         return handler.resolve(request);
+      } catch (_) {
+        super.onError(err, handler);
       }
     } else {
       super.onError(err, handler);

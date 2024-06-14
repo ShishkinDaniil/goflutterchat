@@ -13,8 +13,6 @@ class MainAppRunner implements AppRunner {
 
   @override
   Future<void> preloadData() async {
-    WidgetsFlutterBinding.ensureInitialized();
-
     HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: kIsWeb
           ? HydratedStorage.webStorageDirectory

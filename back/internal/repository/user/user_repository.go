@@ -26,18 +26,16 @@ func NewRepository(db DBTX) Repository {
 
 func (r *repository) CreateUser(ctx context.Context, user *User) (*User, error) {
 	var lastInsertId uuid.UUID
-	print(user.Email)
 	errEmail := r.FindEmail(ctx, user)
 	if errEmail != nil {
 		return &User{}, errEmail
 	}
-	query := "INSERT INTO users(name, password, email, created, uid) VALUES ($1, $2, $3, $4, $5) returning uid"
-	err := r.db.QueryRowContext(ctx, query, user.Name, user.Password, user.Email, user.Created, user.UID).Scan(&lastInsertId)
+	query := "INSERT INTO users(name, password, email, created, uid, chat_id) VALUES ($1, $2, $3, $4, $5, $6) returning uid"
+	err := r.db.QueryRowContext(ctx, query, user.Name, user.Password, user.Email, user.Created, user.UID, user.ChatId).Scan(&lastInsertId)
 	if err != nil {
 		return &User{}, err
 	}
 
-	user.UID = uuid.UUID(lastInsertId)
 	return user, nil
 }
 
@@ -55,8 +53,8 @@ func (r *repository) FindEmail(ctx context.Context, user *User) error {
 
 func (r *repository) GetUserByEmail(ctx context.Context, email string) (*User, error) {
 	u := User{}
-	query := "SELECT uid, email, name, password, created FROM users WHERE email = $1"
-	err := r.db.QueryRowContext(ctx, query, email).Scan(&u.UID, &u.Email, &u.Name, &u.Password, &u.Created)
+	query := "SELECT uid, email, name, password, created, chat_id FROM users WHERE email = $1"
+	err := r.db.QueryRowContext(ctx, query, email).Scan(&u.UID, &u.Email, &u.Name, &u.Password, &u.Created, &u.ChatId)
 	if err != nil {
 		return &User{}, domain.ErrUserNotFound
 	}
@@ -66,8 +64,8 @@ func (r *repository) GetUserByEmail(ctx context.Context, email string) (*User, e
 
 func (r *repository) GetUserByUid(ctx context.Context, uid string) (*User, error) {
 	u := User{}
-	query := "SELECT uid, email, name, password, created FROM users WHERE uid = $1"
-	err := r.db.QueryRowContext(ctx, query, uid).Scan(&u.UID, &u.Email, &u.Name, &u.Password, &u.Created)
+	query := "SELECT uid, email, name, password, created, chat_id FROM users WHERE uid = $1"
+	err := r.db.QueryRowContext(ctx, query, uid).Scan(&u.UID, &u.Email, &u.Name, &u.Password, &u.Created, &u.ChatId)
 	if err != nil {
 		return &User{}, domain.ErrUserNotFound
 	}
@@ -75,7 +73,6 @@ func (r *repository) GetUserByUid(ctx context.Context, uid string) (*User, error
 	return &u, nil
 }
 
-// DeleteToken function to delete refresh Token
 func (r *repository) DeleteRefreshToken(ctx context.Context, userUID string, refreshToken string) (bool, error) {
 	query := "DELETE FROM user_refresh_tokens WHERE token = $1 AND user_uid = $2"
 	err := r.db.QueryRowContext(ctx, query, refreshToken, userUID)
@@ -96,7 +93,7 @@ func (r *repository) CreateRefreshToken(ctx context.Context, userUID string, ref
 
 func (r *repository) GetUidByToken(ctx context.Context, refreshToken string) (*string, error) {
 	var uid *string
-	query := "SELECT user_uid FROM user_refresh_tokens WHERE token = $1"
+	query := "SELECT user_uid FROM user_refresh_tokens WHERE token = $1 AND used is false"
 	err := r.db.QueryRowContext(ctx, query, refreshToken).Scan(&uid)
 	if err != nil {
 		return nil, err
@@ -106,7 +103,7 @@ func (r *repository) GetUidByToken(ctx context.Context, refreshToken string) (*s
 }
 
 func (r *repository) HaveRefreshToken(ctx context.Context, refreshToken string) error {
-	query := "SELECT * FROM user_refresh_tokens WHERE token = $1 AND expiry_time < $2"
+	query := "SELECT * FROM user_refresh_tokens WHERE token = $1 AND expiry_time < $2 AND used is false"
 	q := r.db.QueryRowContext(ctx, query, refreshToken, time.Now())
 	err := q.Err()
 	if err != nil {

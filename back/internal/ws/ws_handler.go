@@ -2,8 +2,10 @@ package ws
 
 import (
 	"net/http"
+	"sort"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
 )
 
@@ -18,7 +20,6 @@ func NewHandler(h *Hub) *Handler {
 }
 
 type CreateRoomReq struct {
-	ID   string `json:"id"`
 	Name string `json:"name"`
 }
 
@@ -29,8 +30,10 @@ func (h *Handler) CreateRoom(c *gin.Context) {
 		return
 	}
 
-	h.hub.Rooms[req.ID] = &Room{
-		ID:      req.ID,
+	uid := uuid.New().String()
+
+	h.hub.Rooms[uid] = &Room{
+		ID:      uid,
 		Name:    req.Name,
 		Clients: make(map[string]*Client),
 	}
@@ -49,6 +52,7 @@ var upgrader = websocket.Upgrader{
 func (h *Handler) JoinRoom(c *gin.Context) {
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
+		print(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -69,6 +73,7 @@ func (h *Handler) JoinRoom(c *gin.Context) {
 		Content:  "A new user has joined the room",
 		RoomID:   roomID,
 		Username: username,
+		ChatId:   clientID,
 	}
 
 	h.hub.Register <- cl
@@ -86,7 +91,13 @@ type RoomRes struct {
 func (h *Handler) GetRooms(c *gin.Context) {
 	rooms := make([]RoomRes, 0)
 
-	for _, r := range h.hub.Rooms {
+	keys := make([]string, 0)
+	for k := range h.hub.Rooms {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	for _, k := range keys {
+		r := h.hub.Rooms[k]
 		rooms = append(rooms, RoomRes{
 			ID:   r.ID,
 			Name: r.Name,

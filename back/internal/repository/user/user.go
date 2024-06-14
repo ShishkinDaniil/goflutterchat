@@ -14,6 +14,7 @@ type User struct {
 	Email    string    `json:"email"`
 	Password string    `json:"password"`
 	Created  time.Time `json:"created"`
+	ChatId   uuid.UUID `json:"chat_id"`
 }
 
 type CreateUserReq struct {
@@ -32,11 +33,13 @@ type UserRes struct {
 	Email        string `json:"email"`
 	AccessToken  string `json:"accessToken"`
 	RefreshToken string `json:"refreshToken"`
+	ChatId       string `json:"chatId"`
 }
 
 type UserBodyRes struct {
-	Name  string `json:"name"`
-	Email string `json:"email"`
+	Name   string `json:"name"`
+	Email  string `json:"email"`
+	ChatId string `json:"chatId"`
 }
 
 type LoginUserReq struct {

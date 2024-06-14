@@ -1,12 +1,11 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:front/application/domain/error_entity/error_entity.dart';
 import 'package:front/feature/auth/data/dto/token_dto.dart';
 import 'package:front/feature/auth/data/dto/user_dto.dart';
 import 'package:front/feature/auth/domain/auth_repository.dart';
 import 'package:front/feature/auth/domain/entities/user_entity/user_entity.dart';
+import 'package:front/utils/error_variable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -119,8 +118,12 @@ class AuthCubit extends HydratedCubit<AuthState> {
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) {
-    emit(AuthState.error(error));
-    super.addError(error, stackTrace);
+    if (isServerEternalError(error)) {
+      super.addError(error, stackTrace);
+    } else {
+      emit(AuthState.error(error));
+      super.addError(error, stackTrace);
+    }
   }
 }
 
@@ -128,7 +131,7 @@ extension HomeBlocExtension on BuildContext {
   AuthCubit get authCubit {
     try {
       return BlocProvider.of(this);
-    } catch (e, st) {
+    } catch (e) {
       rethrow;
     }
   }

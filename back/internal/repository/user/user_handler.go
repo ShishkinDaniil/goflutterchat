@@ -29,12 +29,13 @@ func NewHandler(s Service, tokenManager auth.TokenManager) *Handler {
 }
 
 func (h *Handler) GetProfile(c *gin.Context) {
-	a, err := c.Get(userCtx)
+	userId, err := c.Get(userCtx)
 	if !err {
 		c.JSON(http.StatusInternalServerError, gin.H{})
 		return
 	}
-	res, errGet := h.Service.GetProfile(c, a.(string))
+	print(userId)
+	res, errGet := h.Service.GetProfile(c, userId.(string))
 	if errGet != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return
@@ -79,6 +80,7 @@ func (h *Handler) UserIdentity(c *gin.Context) {
 	id, err := h.parseAuthHeader(c)
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		c.Abort()
 	}
 
 	c.Set(userCtx, id)

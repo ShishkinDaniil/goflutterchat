@@ -40,6 +40,10 @@ func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*UserRes, e
 	if err != nil {
 		return nil, err
 	}
+	chatID, err := uuid.NewUUID()
+	if err != nil {
+		return nil, err
+	}
 	createdTime, err := time.Parse("2006-01-02T15:04:05", time.Now().Format("2006-01-02T15:04:05"))
 	if err != nil {
 		return nil, err
@@ -50,11 +54,12 @@ func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*UserRes, e
 		Email:    req.Email,
 		Password: hashedPassword,
 		Created:  createdTime,
+		ChatId:   chatID,
 	}
 
-	r, err := s.Repository.CreateUser(ctx, u)
-	if err != nil {
-		return nil, err
+	r, createErr := s.Repository.CreateUser(ctx, u)
+	if createErr != nil {
+		return nil, createErr
 	}
 
 	refreshToken, err := s.tokenManager.NewRefreshToken()
@@ -75,6 +80,7 @@ func (s *service) CreateUser(c context.Context, req *CreateUserReq) (*UserRes, e
 		Email:        r.Email,
 		RefreshToken: refreshToken,
 		AccessToken:  ss,
+		ChatId:       r.ChatId.String(),
 	}
 
 	return res, nil
@@ -107,7 +113,7 @@ func (s *service) Login(c context.Context, req *LoginUserReq) (*UserRes, error) 
 		return &UserRes{}, err
 	}
 
-	return &UserRes{AccessToken: ss, RefreshToken: refreshToken, Name: u.Name, Email: u.Email}, nil
+	return &UserRes{AccessToken: ss, RefreshToken: refreshToken, Name: u.Name, Email: u.Email, ChatId: u.ChatId.String()}, nil
 }
 
 func (s *service) GetProfile(c context.Context, req string) (*UserBodyRes, error) {
@@ -116,7 +122,7 @@ func (s *service) GetProfile(c context.Context, req string) (*UserBodyRes, error
 		return nil, err
 	}
 
-	return &UserBodyRes{Name: user.Name, Email: user.Email}, nil
+	return &UserBodyRes{Name: user.Name, Email: user.Email, ChatId: user.ChatId.String()}, nil
 }
 
 func (s *service) RefreshTokens(c context.Context, refreshToken string) (*TokenResponse, error) {

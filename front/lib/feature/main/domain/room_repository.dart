@@ -1,16 +1,15 @@
+import 'package:front/feature/auth/domain/entities/user_entity/user_entity.dart';
+import 'package:front/feature/main/domain/entities/room_entity/room_entity.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
+
 abstract class RoomRepository {
-  Future<dynamic> getRooms({
-    required String password,
-    required String email,
+  Future<List<RoomEntity>> getRooms();
+  Future<dynamic> createRoom({
     required String name,
   });
-  Future<dynamic> createRoom({
-    required String password,
-    required String email,
-  });
 
-  Future<dynamic> joinRoom({
-    String name,
-    String email,
+  Future<WebSocketChannel> joinRoom({
+    required RoomEntity room,
+    required UserEntity userEntity,
   });
 }
