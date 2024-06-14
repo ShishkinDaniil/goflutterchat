@@ -86,9 +86,7 @@ class _MainScreenContent extends StatelessWidget {
         );
       },
       child: SingleChildScrollView(
-        physics: isLoading
-            ? NeverScrollableScrollPhysics()
-            : AlwaysScrollableScrollPhysics(),
+        physics: AlwaysScrollableScrollPhysics(),
         child: SizedBox(
           width: double.infinity,
           child: Padding(

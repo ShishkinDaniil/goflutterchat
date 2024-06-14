@@ -15,7 +15,7 @@ class ErrorEntity {
   factory ErrorEntity.fromException(dynamic error) {
     if (error is ErrorEntity) return error;
     final entity = ErrorEntity(
-      message: "Неизвестная ошибка",
+      message: "Unknown error",
     );
     if (error is DioException) {
       try {
@@ -23,7 +23,7 @@ class ErrorEntity {
         print(error.response?.data);
 
         return ErrorEntity(
-          message: error.response?.data['error'] ?? "Неизвестная ошибка",
+          message: error.response?.data['error'] ?? "Unknown error",
           stackTrace: error.stackTrace,
           error: error,
         );

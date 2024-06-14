@@ -6,6 +6,7 @@ import 'package:front/application/di/init_di.dart';
 import 'package:front/application/domain/error_entity/error_entity.dart';
 import 'package:front/application/ui/app_loader.dart';
 import 'package:front/feature/auth/domain/auth_state/auth_cubit.dart';
+import 'package:front/feature/main/ui/main_screen.dart';
 import 'package:front/feature/auth/ui/auth_screen.dart';
 import 'package:front/application/ui/error_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -33,8 +34,13 @@ class AppRoutes {
                     AuthScreen();
               }),
           GoRoute(
+            path: main,
+            builder: (context, state) => const MainScreen(),
+          ),
+          GoRoute(
             path: loading,
             builder: (context, state) => const AppLoader(),
+            //redirect: _authRedirect(auth),
           ),
         ],
         restorationScopeId: 'router',
@@ -58,6 +64,64 @@ class AppRoutes {
           return const ErrorScreen();
         },
       );
+
+  // static GoRouter get router {
+  //   return GoRouter(
+  //     refreshListenable: GoRouterRefreshBloc(),
+  //     initialLocation: root,
+  //     routes: <RouteBase>[
+  //       GoRoute(
+  //         path: root,
+  //         builder: (context, state) => const RootScreen(),
+  //         // redirect: _rootRedirect(),
+  //         routes: [
+  //           // GoRoute(
+  //           //   path: _authSub,
+  //           //   builder: (context, state) => const AuthScreen(),
+  //           //   redirect: _authRedirect(_authSub),
+  //           // ),
+  //           // GoRoute(
+  //           //   path: _mainSub,
+  //           //   builder: (context, state) => const MainScreen(),
+  //           //   redirect: _authRedirect(_mainSub),
+  //           // ),
+  //           // GoRoute(
+  //           //   path: _loadingSub,
+  //           //   builder: (context, state) => const AppLoader(),
+  //           //   //redirect: _authRedirect(auth),
+  //           // ),
+  //         ],
+  //       ),
+  //       GoRoute(
+  //         path: auth,
+  //         builder: (context, state) => const AuthScreen(),
+  //         // redirect: _authRedirect(auth),
+  //       ),
+  //       GoRoute(
+  //         path: main,
+  //         builder: (context, state) => const MainScreen(),
+  //         // redirect: _authRedirect(_mainSub),
+  //       ),
+  //       GoRoute(
+  //         path: loading,
+  //         builder: (context, state) => const AppLoader(),
+  //         //redirect: _authRedirect(auth),
+  //       ),
+  //     ],
+  //     redirect: (context, state) {
+  //       return context.authCubit.state.when(
+  //         notAuthorized: () => auth,
+  //         authorized: (a) => main,
+  //         waiting: () => loading,
+  //         error: (e) => auth,
+  //       );
+  //     },
+  //     errorBuilder: (context, state) {
+  //       print(state.error);
+  //       return const ErrorScreen();
+  //     },
+  //   );
+  // }
 }
 
 class _GoRouterRefreshBloc<BLOC extends BlocBase<STATE>, STATE>

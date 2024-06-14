@@ -7,7 +7,6 @@ import 'package:front/feature/auth/domain/entities/user_entity/user_entity.dart'
 import 'package:front/feature/main/domain/entities/room_entity/room_entity.dart';
 import 'package:front/feature/main/domain/room_repository.dart';
 import 'package:injectable/injectable.dart';
-import 'package:web_socket_channel/html.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -53,12 +52,13 @@ class NetworkRoomRepository implements RoomRepository {
       final user = locator.get<AuthCubit>().state.whenOrNull(
             authorized: (userEntity) => userEntity,
           );
+
       final accessToken = user?.accessToken;
       final chatId = user?.chatId;
       final url = locator.get<AppConfig>().wsUrl;
 
       WebSocketChannel channel = kIsWeb
-          ? await HtmlWebSocketChannel.connect(
+          ? await WebSocketChannel.connect(
               Uri.parse(url + "ws/joinRoom/$id?username=$name&userId=$chatId"))
           : await IOWebSocketChannel.connect(
               Uri.parse(url + "ws/joinRoom/$id?username=$name&userId=$chatId"),
