@@ -31,7 +31,7 @@ class AppRoutes {
                         error: ErrorEntity.fromException(error).message,
                       ),
                     ) ??
-                    AuthScreen();
+                    const AuthScreen();
               }),
           GoRoute(
             path: main,
@@ -40,7 +40,6 @@ class AppRoutes {
           GoRoute(
             path: loading,
             builder: (context, state) => const AppLoader(),
-            //redirect: _authRedirect(auth),
           ),
         ],
         restorationScopeId: 'router',
@@ -60,68 +59,9 @@ class AppRoutes {
           );
         },
         errorBuilder: (context, state) {
-          print(state.error);
           return const ErrorScreen();
         },
       );
-
-  // static GoRouter get router {
-  //   return GoRouter(
-  //     refreshListenable: GoRouterRefreshBloc(),
-  //     initialLocation: root,
-  //     routes: <RouteBase>[
-  //       GoRoute(
-  //         path: root,
-  //         builder: (context, state) => const RootScreen(),
-  //         // redirect: _rootRedirect(),
-  //         routes: [
-  //           // GoRoute(
-  //           //   path: _authSub,
-  //           //   builder: (context, state) => const AuthScreen(),
-  //           //   redirect: _authRedirect(_authSub),
-  //           // ),
-  //           // GoRoute(
-  //           //   path: _mainSub,
-  //           //   builder: (context, state) => const MainScreen(),
-  //           //   redirect: _authRedirect(_mainSub),
-  //           // ),
-  //           // GoRoute(
-  //           //   path: _loadingSub,
-  //           //   builder: (context, state) => const AppLoader(),
-  //           //   //redirect: _authRedirect(auth),
-  //           // ),
-  //         ],
-  //       ),
-  //       GoRoute(
-  //         path: auth,
-  //         builder: (context, state) => const AuthScreen(),
-  //         // redirect: _authRedirect(auth),
-  //       ),
-  //       GoRoute(
-  //         path: main,
-  //         builder: (context, state) => const MainScreen(),
-  //         // redirect: _authRedirect(_mainSub),
-  //       ),
-  //       GoRoute(
-  //         path: loading,
-  //         builder: (context, state) => const AppLoader(),
-  //         //redirect: _authRedirect(auth),
-  //       ),
-  //     ],
-  //     redirect: (context, state) {
-  //       return context.authCubit.state.when(
-  //         notAuthorized: () => auth,
-  //         authorized: (a) => main,
-  //         waiting: () => loading,
-  //         error: (e) => auth,
-  //       );
-  //     },
-  //     errorBuilder: (context, state) {
-  //       print(state.error);
-  //       return const ErrorScreen();
-  //     },
-  //   );
-  // }
 }
 
 class _GoRouterRefreshBloc<BLOC extends BlocBase<STATE>, STATE>

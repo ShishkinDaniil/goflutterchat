@@ -64,7 +64,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return Form(
       key: index == 0 ? _signInKey : _signUpKey,
       child: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(
             Radius.circular(8),
           ),
@@ -88,7 +88,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   List<Widget> _buildSignInBody() {
     return [
-      Text('Sign In'),
+      const Text('Sign In'),
       TextFormField(
         onTap: _signInValidate,
         focusNode: _emailFocus,
@@ -121,12 +121,12 @@ class _AuthScreenState extends State<AuthScreen> {
             _onTapToSignIn(context.authCubit);
           }
         },
-        child: Text('Sign In'),
+        child: const Text('Sign In'),
       ),
       Wrap(
         alignment: WrapAlignment.center,
         children: [
-          Text('Not registered yet?'),
+          const Text('Not registered yet?'),
           AppTextButton(
             onPressed: () {
               _passwordController.text = '';
@@ -148,7 +148,7 @@ class _AuthScreenState extends State<AuthScreen> {
       TextFormField(
         onTap: _signUpValidate,
         controller: _nameController,
-        decoration: InputDecoration(hintText: 'Name'),
+        decoration: const InputDecoration(hintText: 'Name'),
         validator: _validateName,
         focusNode: _nameFocus,
         onTapOutside: (event) {
@@ -188,7 +188,7 @@ class _AuthScreenState extends State<AuthScreen> {
               _onTapToSignUp(context.authCubit);
             }
           },
-          child: Text('Sign Up')),
+          child: const Text('Sign Up')),
       TextButton(
         onPressed: () {
           _passwordController.text = '';

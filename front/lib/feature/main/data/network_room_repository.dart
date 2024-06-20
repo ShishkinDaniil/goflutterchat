@@ -22,7 +22,6 @@ class NetworkRoomRepository implements RoomRepository {
     try {
       await dioContainer.dio.post("ws/createRoom", data: {'name': name});
     } catch (_) {
-      print(_);
       rethrow;
     }
   }
@@ -36,7 +35,6 @@ class NetworkRoomRepository implements RoomRepository {
 
       return rooms;
     } catch (_) {
-      print(_);
       rethrow;
     }
   }
@@ -58,15 +56,14 @@ class NetworkRoomRepository implements RoomRepository {
       final url = locator.get<AppConfig>().wsUrl;
 
       WebSocketChannel channel = kIsWeb
-          ? await WebSocketChannel.connect(
-              Uri.parse(url + "ws/joinRoom/$id?username=$name&userId=$chatId"))
-          : await IOWebSocketChannel.connect(
-              Uri.parse(url + "ws/joinRoom/$id?username=$name&userId=$chatId"),
+          ? WebSocketChannel.connect(
+              Uri.parse("${url}ws/joinRoom/$id?username=$name&userId=$chatId"))
+          : IOWebSocketChannel.connect(
+              Uri.parse("${url}ws/joinRoom/$id?username=$name&userId=$chatId"),
               headers: {'Authorization': 'Bearer $accessToken'});
 
       return channel;
     } catch (_) {
-      print(_);
       rethrow;
     }
   }

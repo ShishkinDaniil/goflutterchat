@@ -41,7 +41,7 @@ class GoFlutterChatTheme {
       scaffoldBackgroundColor: _Colors.chablis,
       colorScheme: colorScheme,
       textTheme: _textTheme,
-      scrollbarTheme: ScrollbarThemeData(
+      scrollbarTheme: const ScrollbarThemeData(
           trackColor: MaterialStatePropertyAll(_Colors.calmShell),
           thumbColor: MaterialStatePropertyAll(_Colors.calmShell)),
       dialogBackgroundColor: _Colors.chablis,
@@ -57,7 +57,7 @@ class GoFlutterChatTheme {
             EdgeInsets.zero,
           ),
           textStyle: MaterialStateProperty.all(
-            TextStyle(
+            const TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w500,
               color: _Colors.pippin,
@@ -71,32 +71,32 @@ class GoFlutterChatTheme {
         hoverColor: _Colors.athensGray,
         filled: true,
         isDense: true,
-        errorStyle: TextStyle(
+        errorStyle: const TextStyle(
           fontSize: 12,
           color: _Colors.burntSienna,
           fontWeight: FontWeight.w400,
         ),
-        labelStyle: TextStyle(
+        labelStyle: const TextStyle(
           fontSize: 17,
           color: _Colors.spunPearl,
           fontWeight: FontWeight.w400,
         ),
-        helperStyle: TextStyle(
+        helperStyle: const TextStyle(
           fontSize: 12,
           color: _Colors.spunPearl,
           fontWeight: FontWeight.w400,
         ),
-        hintStyle: TextStyle(
+        hintStyle: const TextStyle(
           fontSize: 17,
           color: _Colors.spunPearl,
           fontWeight: FontWeight.w400,
         ),
-        contentPadding: EdgeInsetsDirectional.all(4),
+        contentPadding: const EdgeInsetsDirectional.all(4),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: _Colors.waterloo, width: 2),
+          borderSide: const BorderSide(color: _Colors.waterloo, width: 2),
           borderRadius: BorderRadius.circular(8),
         ),
-        floatingLabelStyle: TextStyle(
+        floatingLabelStyle: const TextStyle(
           fontSize: 14,
           color: _Colors.spunPearl,
           fontWeight: FontWeight.w400,

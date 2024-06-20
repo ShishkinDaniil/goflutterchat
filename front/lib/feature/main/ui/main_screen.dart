@@ -16,8 +16,8 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          HomeBloc(locator.get<RoomRepository>())..add(HomeEvent.started()),
+      create: (context) => HomeBloc(locator.get<RoomRepository>())
+        ..add(const HomeEvent.started()),
       child: _MainScreenContent(),
     );
   }
@@ -31,7 +31,7 @@ class _MainScreenContent extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Rooms'),
+          title: const Text('Rooms'),
         ),
         body: Shimmer(
           linearGradient: GoFlutterChatTheme.shimmerGradient,
@@ -69,7 +69,7 @@ class _MainScreenContent extends StatelessWidget {
   }
 
   Widget _buildPlaceholder() {
-    return Scaffold(
+    return const Scaffold(
       appBar: null,
       body: Center(
         child: Text('Just click on room'),
@@ -82,11 +82,11 @@ class _MainScreenContent extends StatelessWidget {
     return RefreshIndicator.adaptive(
       onRefresh: () async {
         return BlocProvider.of<HomeBloc>(context).add(
-          HomeEvent.refresh(),
+          const HomeEvent.refresh(),
         );
       },
       child: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         child: SizedBox(
           width: double.infinity,
           child: Padding(
@@ -96,9 +96,9 @@ class _MainScreenContent extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: 50),
+                const SizedBox(height: 50),
                 _buildName(),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ShimmerLoading(
                   isLoading: isLoading,
                   child: _buildAddRoomButton(context, isLoading),
@@ -179,23 +179,6 @@ class _MainScreenContent extends StatelessWidget {
                 BlocProvider.of<HomeBloc>(context).add(
                   HomeEvent.roomJoinden(user, room),
                 );
-
-                // context.goNamed('chat', extra: ChatScreenArgs(room, user));
-                // Navigator.of(context).pushAndRemoveUntil(
-                //   MaterialPageRoute(
-                //     builder: (context) {
-                //       return ChatScreen(args: ChatScreenArgs(room, user));
-                //     },
-                //   ),
-                //   (a) => false,
-                // );
-
-                // SplitView.of(context).setSecondary(
-                //   ChatScreen(
-                //     args: ChatScreenArgs(room, user),
-                //   ),
-                //   title: room.name,
-                // );
               }
             }
           },
@@ -206,7 +189,7 @@ class _MainScreenContent extends StatelessWidget {
               color: GoFlutterChatTheme.roomItemColor,
               borderRadius: BorderRadius.circular(8),
             ),
-            padding: EdgeInsetsDirectional.all(8),
+            padding: const EdgeInsetsDirectional.all(8),
             child: Text(
               room?.name ?? '',
               style: GoFlutterChatTheme.roomNameTextStyle,
@@ -221,15 +204,16 @@ class _MainScreenContent extends StatelessWidget {
     return TextButton(
       onPressed: () async {
         if (!isLoading) {
+          final bloc = BlocProvider.of<HomeBloc>(context);
           final res = await showDialog<String>(
               context: context,
               builder: (context) {
-                final _controller = TextEditingController();
+                final controller = TextEditingController();
 
                 return AlertDialog(
-                  title: Text('Add room'),
+                  title: const Text('Add room'),
                   content: TextField(
-                    controller: _controller,
+                    controller: controller,
                   ),
                   actions: <Widget>[
                     TextButton(
@@ -238,7 +222,7 @@ class _MainScreenContent extends StatelessWidget {
                       ),
                       child: const Text('Add'),
                       onPressed: () {
-                        final text = _controller.text.trim();
+                        final text = controller.text.trim();
                         final length = text.length;
                         if (length > 2 && length < 11) {
                           Navigator.of(context).pop(text);
@@ -258,19 +242,19 @@ class _MainScreenContent extends StatelessWidget {
                 );
               });
           if (res != null) {
-            BlocProvider.of<HomeBloc>(context).add(
+            bloc.add(
               HomeEvent.roomCreated(res),
             );
           }
         }
       },
-      child: Text(
+      child: const Text(
         'Add room',
       ),
     );
   }
 
   Widget _buildEmptyContent() {
-    return Center(child: Text('There is not a single room'));
+    return const Center(child: Text('There is not a single room'));
   }
 }

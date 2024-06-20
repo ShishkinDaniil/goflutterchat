@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:front/feature/auth/domain/entities/user_entity/user_entity.dart';
 import 'package:front/feature/chat/data/dto/message_dto.dart';
@@ -29,14 +29,14 @@ class ChatScreenBloc extends Bloc<ChatScreenEvent, ChatScreenState> {
     this.room,
     this.user,
     this.webSoketChannel,
-  ) : super(ChatScreenInitial()) {
+  ) : super(const ChatScreenInitial()) {
     onBlocEvent((event) => _eventToState(event));
 
     _streamSubscription = webSoketChannel.stream.listen((event) {
       _messages
           .add(MessageDto.fromJson(json.decode(event)).toMessage(user.chatId));
 
-      add(ChatScreenChanged());
+      add(const ChatScreenChanged());
     }, onDone: () {
       //  yield ChatScreenDone();
     }, onError: (err) {
@@ -64,7 +64,7 @@ class ChatScreenBloc extends Bloc<ChatScreenEvent, ChatScreenState> {
   }
 
   Stream<ChatScreenState> _mapChangedToState(ChatScreenChanged event) async* {
-    yield ChatScreenUpdated();
+    yield const ChatScreenUpdated();
     yield* _toSuccessState();
   }
 
@@ -72,7 +72,7 @@ class ChatScreenBloc extends Bloc<ChatScreenEvent, ChatScreenState> {
     try {
       webSoketChannel.sink.add(event.message);
     } catch (err) {
-      yield ChatScreenError();
+      yield const ChatScreenError();
     }
   }
 

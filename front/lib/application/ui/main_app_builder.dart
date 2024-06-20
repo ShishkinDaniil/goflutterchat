@@ -22,9 +22,8 @@ class MainAppBuilder implements AppBuider {
 
 class _GlobalProviders extends StatelessWidget {
   const _GlobalProviders({
-    Key? key,
     required this.child,
-  }) : super(key: key);
+  });
   final Widget child;
 
   @override

@@ -14,7 +14,7 @@ part 'home_bloc.freezed.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final RoomRepository roomRepository;
-  HomeBloc(this.roomRepository) : super(HomeState.initial()) {
+  HomeBloc(this.roomRepository) : super(const HomeState.initial()) {
     onBlocEvent((event) => _eventToState(event));
   }
 
@@ -36,8 +36,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       final channel = await roomRepository.joinRoom(
           room: event.roomEntity, userEntity: event.userEntity);
-      print(channel);
-      print(channel);
 
       yield HomeState.joinRoom(channel, event.userEntity, event.roomEntity);
     } catch (error, stackTrace) {
@@ -54,7 +52,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Stream<HomeState> _toSuccessState() async* {
-    yield _LoadInProgress();
+    yield const _LoadInProgress();
     try {
       final rooms = await roomRepository.getRooms();
       // await Future.delayed(Duration(seconds: 10));

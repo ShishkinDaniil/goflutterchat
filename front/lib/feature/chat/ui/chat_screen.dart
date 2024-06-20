@@ -24,7 +24,7 @@ class ChatScreen extends StatelessWidget {
         args.room,
         args.userEntity,
         args.webSocketChannel,
-      )..add(ChatScreenShown()),
+      )..add(const ChatScreenShown()),
       child: _ChatScreenContent(args: args),
     );
   }
@@ -69,7 +69,7 @@ class _ChatScreenContentState extends State<_ChatScreenContent> {
               _buildError();
             }
 
-            return AppLoader();
+            return const AppLoader();
           },
         ),
       ),
@@ -77,7 +77,7 @@ class _ChatScreenContentState extends State<_ChatScreenContent> {
   }
 
   Widget _buildError() {
-    return Center(
+    return const Center(
       child: Text("Error"),
     );
   }
@@ -99,7 +99,7 @@ class _ChatScreenContentState extends State<_ChatScreenContent> {
             ),
           ),
         ),
-        Divider(
+        const Divider(
           thickness: 5,
           height: 5,
         ),
@@ -110,7 +110,7 @@ class _ChatScreenContentState extends State<_ChatScreenContent> {
 
   Widget _buildInputItem() {
     return SafeArea(
-      minimum: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      minimum: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Row(
         children: [
           Expanded(
@@ -121,13 +121,13 @@ class _ChatScreenContentState extends State<_ChatScreenContent> {
               maxLines: 10,
             ),
           ),
-          SizedBox(
+          const SizedBox(
             width: 20,
           ),
           IconButton(
             alignment: Alignment.center,
             iconSize: 48,
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.add_circled_solid,
               color: Colors.amber,
               size: 48,
@@ -166,9 +166,8 @@ class ChatScreenArgs {
 class _MessageItem extends StatelessWidget {
   final Message message;
   const _MessageItem({
-    Key? key,
     required this.message,
-  }) : super(key: key);
+  });
 
   static const _borderRadius = 26.0;
 
@@ -189,7 +188,7 @@ class _MessageItem extends StatelessWidget {
       message: message,
       backColor: GoFlutterChatTheme.roomItemColor,
       alignment: AlignmentDirectional.centerEnd,
-      borederRadius: BorderRadiusDirectional.only(
+      borederRadius: const BorderRadiusDirectional.only(
         bottomEnd: Radius.circular(_borderRadius),
         bottomStart: Radius.circular(_borderRadius),
         topStart: Radius.circular(_borderRadius),
@@ -203,7 +202,7 @@ class _MessageItem extends StatelessWidget {
       backColor: GoFlutterChatTheme.roomItemColor.withOpacity(0.5),
       nameReq: true,
       alignment: AlignmentDirectional.centerStart,
-      borederRadius: BorderRadiusDirectional.only(
+      borederRadius: const BorderRadiusDirectional.only(
         bottomEnd: Radius.circular(_borderRadius),
         bottomStart: Radius.circular(_borderRadius),
         topEnd: Radius.circular(_borderRadius),
@@ -216,7 +215,7 @@ class _MessageItem extends StatelessWidget {
       message: message,
       backColor: Colors.grey.withOpacity(0.5),
       alignment: AlignmentDirectional.center,
-      borederRadius: BorderRadiusDirectional.only(
+      borederRadius: const BorderRadiusDirectional.only(
         bottomEnd: Radius.circular(_borderRadius),
         bottomStart: Radius.circular(_borderRadius),
         topEnd: Radius.circular(_borderRadius),
@@ -241,7 +240,7 @@ class _MessageItem extends StatelessWidget {
           children: [
             if (nameReq)
               Padding(
-                padding: EdgeInsetsDirectional.only(bottom: 4),
+                padding: const EdgeInsetsDirectional.only(bottom: 4),
                 child: Text(
                   message.username,
                 ),

@@ -19,7 +19,6 @@ class NetworkAuthRepository implements AuthRepository {
       final user = UserDto.fromJson(res.data);
       return user;
     } catch (_) {
-      print(_);
       rethrow;
     }
   }
@@ -43,7 +42,6 @@ class NetworkAuthRepository implements AuthRepository {
       final token = TokenDto.fromJson(res.data);
       return token;
     } catch (_) {
-      print(_);
       rethrow;
     }
   }
@@ -60,7 +58,6 @@ class NetworkAuthRepository implements AuthRepository {
       final userDto = UserDto.fromJson(res.data);
       return userDto.toEntity();
     } catch (_) {
-      print(_);
       rethrow;
     }
   }

@@ -48,15 +48,14 @@ class _PageConfig {
 
 class SplitView extends StatefulWidget {
   const SplitView.material(
-      {Key? key,
+      {super.key,
       required this.child,
       this.childWidth = _kDefaultWidth,
       this.breakpoint = _kDefaultBreakpoint,
       this.placeholder,
       this.title,
       this.hideDivider})
-      : pageBuilder = _materialPageBuilder,
-        super(key: key);
+      : pageBuilder = _materialPageBuilder;
 
   static SplitViewState of(BuildContext context) {
     final state = context.findAncestorStateOfType<SplitViewState>();

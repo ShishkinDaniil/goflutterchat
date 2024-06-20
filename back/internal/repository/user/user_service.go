@@ -149,20 +149,6 @@ func (s *service) RefreshTokens(c context.Context, refreshToken string) (*TokenR
 		return nil, err
 	}
 
-	// token := jwt.NewWithClaims(jwt.SigningMethodHS256, MyJWTClaims{
-	// 	UID:  u.UID.String(),
-	// 	Name: u.Name,
-	// 	RegisteredClaims: jwt.RegisteredClaims{
-	// 		Issuer:    u.UID.String(),
-	// 		ExpiresAt: jwt.NewNumericDate(time.Now().Add(s.accessTokenTTL)),
-	// 	},
-	// })
-
-	// ss, err := token.SignedString([]byte(secretKey))
-	// if err != nil {
-	// 	return nil, err
-	// }
-
 	return &TokenResponse{AccessToken: ss, RefreshToken: refreshToken}, nil
 
 }

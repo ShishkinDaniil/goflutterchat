@@ -19,9 +19,6 @@ class ErrorEntity {
     );
     if (error is DioException) {
       try {
-        print(error.response?.data);
-        print(error.response?.data);
-
         return ErrorEntity(
           message: error.response?.data['error'] ?? "Unknown error",
           stackTrace: error.stackTrace,
